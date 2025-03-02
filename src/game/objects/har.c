@@ -1116,8 +1116,7 @@ void har_collide_with_har(object *obj_a, object *obj_b, int loop) {
     controller *ctrl_a = game_player_get_ctrl(game_state_get_player(obj_a->gs, a->player_id));
     controller *ctrl_b = game_player_get_ctrl(game_state_get_player(obj_b->gs, b->player_id));
 
-    if(b->state == STATE_STANDING_UP || b->state == STATE_WALLDAMAGE || b->health <= 0 ||
-       b->state >= STATE_VICTORY) {
+    if(b->state == STATE_STANDING_UP || b->state == STATE_WALLDAMAGE || b->health <= 0 || b->state >= STATE_VICTORY) {
         // can't hit em while they're down
         return;
     }
@@ -1129,8 +1128,10 @@ void har_collide_with_har(object *obj_a, object *obj_b, int loop) {
     }
 
     // rehit mode is on, but the opponent isn't airborne or stunned
-    if(obj_b->gs->match_settings.rehit && b->state == STATE_FALLEN && (!object_is_airborne(obj_b) || b->endurance <= 0)) {
-        log_debug("REHIT is not possible %d %f %f %f", object_is_airborne(obj_b), obj_b->pos.x, obj_b->pos.y, b->endurance);
+    if(obj_b->gs->match_settings.rehit && b->state == STATE_FALLEN &&
+       (!object_is_airborne(obj_b) || b->endurance <= 0)) {
+        log_debug("REHIT is not possible %d %f %f %f", object_is_airborne(obj_b), obj_b->pos.x, obj_b->pos.y,
+                  b->endurance);
         return;
     }
 
@@ -1266,8 +1267,7 @@ void har_collide_with_projectile(object *o_har, object *o_pjt) {
     har *other = object_get_userdata(
         game_state_find_object(o_har->gs, game_state_get_player(o_har->gs, abs(h->player_id - 1))->har_obj_id));
 
-    if(h->state == STATE_STANDING_UP || h->state == STATE_WALLDAMAGE || h->health <= 0 ||
-       h->state >= STATE_VICTORY) {
+    if(h->state == STATE_STANDING_UP || h->state == STATE_WALLDAMAGE || h->health <= 0 || h->state >= STATE_VICTORY) {
         // can't hit em while they're down, or done
         return;
     }
@@ -1279,8 +1279,10 @@ void har_collide_with_projectile(object *o_har, object *o_pjt) {
     }
 
     // rehit mode is on, but the opponent isn't airborne or stunned
-    if(o_har->gs->match_settings.rehit && h->state == STATE_FALLEN && (!object_is_airborne(o_har) || h->endurance <= 0)) {
-        log_debug("REHIT is not possible %d %f %f %f", object_is_airborne(o_har), o_har->pos.x, o_har->pos.y, h->endurance);
+    if(o_har->gs->match_settings.rehit && h->state == STATE_FALLEN &&
+       (!object_is_airborne(o_har) || h->endurance <= 0)) {
+        log_debug("REHIT is not possible %d %f %f %f", object_is_airborne(o_har), o_har->pos.x, o_har->pos.y,
+                  h->endurance);
         return;
     }
 
@@ -1288,7 +1290,6 @@ void har_collide_with_projectile(object *o_har, object *o_pjt) {
     if(o_har->gs->match_settings.rehit && h->state == STATE_FALLEN && object_is_airborne(o_har) && h->endurance > 0) {
         rehit = true;
     }
-
 
     // Check for collisions by sprite collision points
     int level = 2;
